@@ -1,0 +1,42 @@
+services:
+  configserver:
+    image: "tarikhamarat/configserver:v2"
+    container_name: configserver-ms
+    ports:
+      - "8071:8071"
+    depends_on:
+      rabbit:
+        condition: service_healthy
+    healthcheck:
+      test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    extends:
+      file: common-config.yml
+      service: microservice-base-config
+    networks:
+      - trkhmrt
+
+  basket_v1:
+    image: "tarikhamarat/basket:v2"
+    container_name: demo
+    ports:
+      - "8081:8081"
+    depends_on:
+      configserver:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "basket"
+    extends:
+      file: common-config.yml
+      service: microservice-configserver-config
+    networks:
+      - trkhmrt
+
+
+
+networks:
+  trkhmrt:
+    driver: "bridge"
