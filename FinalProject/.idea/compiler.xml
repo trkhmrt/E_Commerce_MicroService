@@ -7,10 +7,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="basket_v1" />
+        <module name="eurekaserver" />
+        <module name="gatewayserver" />
         <module name="products_v1" />
         <module name="configserver" />
-        <module name="order_v1" />
       </profile>
       <profile name="Annotation profile for offer_v1" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -22,13 +22,25 @@
         <module name="offer_v1" />
         <module name="fulfillment_v1" />
       </profile>
+      <profile name="Annotation profile for basket_v1" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.36/lombok-1.18.36.jar" />
+        </processorPath>
+        <module name="basket_v1" />
+        <module name="order_v1" />
+      </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="basket_v1" options="-parameters" />
       <module name="configserver" options="-parameters" />
+      <module name="eurekaserver" options="-parameters" />
       <module name="fulfillment_v1" options="-parameters" />
+      <module name="gatewayserver" options="-parameters" />
       <module name="offer_v1" options="-parameters" />
       <module name="order_v1" options="-parameters" />
       <module name="products_v1" options="-parameters" />

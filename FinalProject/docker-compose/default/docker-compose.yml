@@ -1,12 +1,9 @@
 services:
   configserver:
-    image: "tarikhamarat/configserver:v2"
+    image: "tarikhamarat/configservers:v1"
     container_name: configserver-ms
     ports:
       - "8071:8071"
-    depends_on:
-      rabbit:
-        condition: service_healthy
     healthcheck:
       test: "curl --fail --silent localhost:8071/actuator/health/readiness | grep UP || exit 1"
       interval: 10s
@@ -19,22 +16,90 @@ services:
     networks:
       - trkhmrt
 
-  basket_v1:
-    image: "tarikhamarat/basket:v2"
-    container_name: demo
+  eurekaserver:
+    image: "tarikhamarat/eurekaserver:v1"
+    container_name: eurekaserver-ms
     ports:
-      - "8081:8081"
+      - "8070:8070"
+    healthcheck:
+      test: "curl --fail --silent localhost:8070/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     depends_on:
       configserver:
         condition: service_healthy
-    environment:
-      SPRING_APPLICATION_NAME: "basket"
     extends:
       file: common-config.yml
       service: microservice-configserver-config
-    networks:
-      - trkhmrt
+    environment:
+      SPRING_APPLICATION_NAME: "eurekaserver"
 
+
+  basket_v1:
+    image: "tarikhamarat/basket_v1:v1"
+    container_name: basket-ms
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_APPLICATION_NAME: "basket"
+    healthcheck:
+      test: "curl --fail --silent localhost:8082/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    depends_on:
+      eurekaserver:
+        condition: service_healthy
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
+
+  order_v1:
+    image: "tarikhamarat/order_v1:v1"
+    container_name: order-ms
+    ports:
+      - "8085:8085"
+    healthcheck:
+      test: "curl --fail --silent localhost:8085/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    depends_on:
+      eurekaserver:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "order"
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
+
+
+  gatewayserver:
+    image: "tarikhamarat/gatewayserver:v1"
+    container_name: gatewayserver-ms
+    ports:
+      - "8072:8072"
+    healthcheck:
+      test: "curl --fail --silent localhost:8072/actuator/health/readiness | grep UP || exit 1"
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    depends_on:
+      order_v1:
+        condition: service_healthy
+      basket_v1:
+        condition: service_healthy
+    environment:
+      SPRING_APPLICATION_NAME: "gatewayserver"
+    extends:
+      file: common-config.yml
+      service: microservice-eureka-config
 
 
 networks:
