@@ -64,7 +64,9 @@ public class BasketController {
     //@Retry(name="getbasketDetailInfo",fallbackMethod = "getbasketDetailInfoFallBack")
     @GetMapping("/getbasketdetail")
     public String getBasketDetail(){
-        logger.debug("getBasketDetailInfoFallBack() getbasket info");
+        //logger.debug("getBasketDetailInfoFallBack() getbasket info");
+        logger.debug("fetch basket detail start");
+        logger.debug("fetch basket detail end");
         //throw new RuntimeException();
         return "my basket";
     }

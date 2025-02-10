@@ -28,6 +28,13 @@ info:
     description: "Tarık Hamarat order v1"
     version: "1.0"
 
+logging:
+  level:
+    com:
+      order:
+        order_v1: DEBUG
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
 
 management:
   endpoints:

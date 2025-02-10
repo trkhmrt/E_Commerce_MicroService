@@ -48,6 +48,16 @@ info:
     description: "Tarık Hamarat basket v1"
     version: "1.0"
 
+
+logging:
+  level:
+    com:
+      basket:
+        basket_v1: DEBUG
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
+
+
 resilience4j.retry:
   configs:
     default:
