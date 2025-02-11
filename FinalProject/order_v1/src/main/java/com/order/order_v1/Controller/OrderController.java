@@ -27,8 +27,6 @@ public class OrderController {
 
     @PostMapping("/postOrderTest")
     public ResponseEntity<String> postOrderTest(){
-
-
         return ResponseEntity.ok("Hello This is post method for test");
     }
 
