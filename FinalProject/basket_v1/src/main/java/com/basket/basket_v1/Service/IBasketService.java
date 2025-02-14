@@ -7,7 +7,7 @@ import java.util.List;
 public interface IBasketService {
     void addProductToBasket();
 
-    Basket getBasket(Long customerId);
+    Long getBasket(Long customerId);
 
     List<Basket> getBaskets();
 }

@@ -49,10 +49,11 @@ public class BasketController {
 
     @RateLimiter(name="getBasketDetail",fallbackMethod = "getBasketFallBack")
     @GetMapping("/getbasket")
-    public String getBasket(){
-        logger.debug("Invoked getbasket info");
+    public Long getBasket(){
+        //logger.debug("Invoked getbasket info");
         //throw new RuntimeException();
-        return "my basket";
+
+        return  basketService.getBasket(12345L);
     }
 
     public String getBasketFallBack(Throwable throwable){
